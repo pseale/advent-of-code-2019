@@ -1,0 +1,5 @@
+node_modules
+*.js
+
+# This is a toy project, and I don't care for your security concerns if you run this code later. Enjoy!
+package-lock.json

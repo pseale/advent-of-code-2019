@@ -1,2 +1,5 @@
-console.log("made it here");
+var solve = require('./solve');
+
+solve.parse('a');
+
 export {};

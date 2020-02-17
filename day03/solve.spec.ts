@@ -1,16 +1,24 @@
-const { parseLine, parseFullInput } = require('./solve.js');
-const solve = require('./solve.js');
+const { parseLine, parseFullInput, findIntersections } = require('./solve.js');
 
-describe('individual line parser tests', () => {
+describe("findIntersections()", () => {
+    describe("when the segments do not intersect", () => {
+        it("errors", () => {
+            const s1 = { topLeft: { x: 0, y: 0 }, bottomRight: { x: 0, y: 0 } };
+            const s2 = { topLeft: { x: 1, y: 1 }, bottomRight: { x: 1, y: 1 } };
+
+            expect(() => findIntersections([[s1], [s2]])).toThrow();
+        });
+    });
+});
+describe('parseLine()', () => {
     it('parses', () => {
         expectLineToBe(parseLine('2U'), 2, 'up');
     })
 });
 
-describe('full input parser tests', () => {
+describe('parseFullInput()', () => {
     it('parses two wires correctly', () => {
-        const i = '2U,3D\n4L,5R,6U'
-        const wires = parseFullInput(i);
+        const wires = parseFullInput('2U,3D\n4L,5R,6U');
         expect(wires.length).toBe(2);
 
         const w1lines = wires[0];

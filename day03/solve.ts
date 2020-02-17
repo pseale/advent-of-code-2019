@@ -42,5 +42,21 @@ function parseInput(input: string) {
     return wires;
 }
 
+interface Point {
+    x: number,
+    y: number
+}
+
+interface Segment {
+    topLeft: Point,
+    bottomRight: Point,
+}
+
+function findWireIntersections(wires: Segment[][]) {
+
+    throw "hey";
+}
+
 exports.parseLine = parse;
 exports.parseFullInput = parseInput;
+exports.findIntersections = findWireIntersections;

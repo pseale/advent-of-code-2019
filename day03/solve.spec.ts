@@ -17,6 +17,21 @@ describe("findIntersections()", () => {
 
             expect(() => findIntersections([wire1, wire2])).toThrow();
         });
+    });
+
+    describe("when the segments intersect successfully", () => {
+        it("finds the intersection", () => {
+            // .|.
+            // ++- <-- we expect the two wires to meet up at 1,-1
+            // ++.
+            const wires = parseFullInput('1U,2R\n1R,2U');
+            const intersections = findIntersections(wires);
+            expect(intersections.length).toBe(1);
+
+            const i = intersections[0];
+            expect(i.x).toBe(1);
+            expect(i.y).toBe(-1);
+        })
     })
 });
 

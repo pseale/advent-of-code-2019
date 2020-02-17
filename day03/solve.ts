@@ -26,4 +26,21 @@ interface Line {
     distance: number
 }
 
+function parseInput(input: string) {
+    if (!input) throw "missing input";
+    
+    const linesOfText = input.split('\n').map(x => x.trim()).filter(x => x !== null && x !== "");
+    if (linesOfText.length !== 2) throw `expected 2 non-empty lines, but got ${linesOfText.length}`;
+
+    const wires = [];
+
+    for (const text of linesOfText) {
+        const lines = text.split(',').map(x => x.trim()).filter(x => x !== null && x !== "");
+        wires.push(lines.map(x => parse(x)));
+    }
+    
+    return wires;
+}
+
 exports.parseLine = parse;
+exports.parseFullInput = parseInput;

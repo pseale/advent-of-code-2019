@@ -8,7 +8,17 @@ function parse(input: string) : Line {
     if (match.length > 1) throw "multiple numbers found, but expected exactly 1";
     if (Number(match[0]) !== Number.parseFloat(match[0])) throw "partial number provided, but we expected a whole number"
     const distance = Number(match[0]);
-   return { direction: 'up', distance: distance}; 
+
+    const directionCharacter = input[input.length - 1];
+    return { direction: getDirection(directionCharacter), distance: distance}; 
+}
+
+function getDirection(c: string) {
+    if (c.toLowerCase() === 'u') return 'up';
+    if (c.toLowerCase() === 'd') return 'down';
+    if (c.toLowerCase() === 'l') return 'left';
+    if (c.toLowerCase() === 'r') return 'right';
+    throw `invalid direction '${c}' provided`;
 }
 
 interface Line {

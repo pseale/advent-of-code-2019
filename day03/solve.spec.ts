@@ -3,13 +3,26 @@ const { parseLine, parseFullInput, findIntersections } = require('./solve.js');
 describe("findIntersections()", () => {
     describe("when the segments do not intersect", () => {
         it("errors", () => {
-            const s1 = { topLeft: { x: 0, y: 0 }, bottomRight: { x: 0, y: 0 } };
-            const s2 = { topLeft: { x: 1, y: 1 }, bottomRight: { x: 1, y: 1 } };
+            const wire1 = [createSegment(0, 0, -1, -1)];
+            const wire2 = [createSegment(1, 1, 2, 2)];
 
-            expect(() => findIntersections([[s1], [s2]])).toThrow();
+            expect(() => findWireIntersections([wire1, wire2])).toThrow();
         });
     });
+
+    describe("when the segments intersect only at 0, 0", () => {
+        it("errors", () => {
+            const wire1 = [createSegment(0, 0, 1, 0)];
+            const wire2 = [createSegment(0, 0, 0, 1)];
+
+            expect(() => findWireIntersections([wire1, wire2])).toThrow();
+        });
+    })
 });
+
+function createSegment(topLeftX: number, topLeftY: number, bottomRightX: number, bottomRightY: number) {
+    return { topLeft: { x: topLeftX, y: topLeftY }, bottomRight: { x: bottomRightX, y: bottomRightY } };
+}
 describe('parseLine()', () => {
     it('parses', () => {
         expectLineToBe(parseLine('2U'), 2, 'up');

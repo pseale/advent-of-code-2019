@@ -26,4 +26,4 @@ interface Line {
     distance: number
 }
 
-exports.parse = parse;
+exports.parseLine = parse;

@@ -1,4 +1,4 @@
-const { parseLine, parseFullInput, findIntersections } = require('./solve.js');
+const { parseLine, parseFullInput, findIntersections, convert } = require('./solve.js');
 
 describe("findIntersections()", () => {
     describe("when the segments do not intersect", () => {
@@ -6,7 +6,7 @@ describe("findIntersections()", () => {
             const wire1 = [createSegment(0, 0, -1, -1)];
             const wire2 = [createSegment(1, 1, 2, 2)];
 
-            expect(() => findWireIntersections([wire1, wire2])).toThrow();
+            expect(() => findIntersections([wire1, wire2])).toThrow();
         });
     });
 
@@ -15,7 +15,7 @@ describe("findIntersections()", () => {
             const wire1 = [createSegment(0, 0, 1, 0)];
             const wire2 = [createSegment(0, 0, 0, 1)];
 
-            expect(() => findWireIntersections([wire1, wire2])).toThrow();
+            expect(() => findIntersections([wire1, wire2])).toThrow();
         });
     })
 });
@@ -23,6 +23,23 @@ describe("findIntersections()", () => {
 function createSegment(topLeftX: number, topLeftY: number, bottomRightX: number, bottomRightY: number) {
     return { topLeft: { x: topLeftX, y: topLeftY }, bottomRight: { x: bottomRightX, y: bottomRightY } };
 }
+
+describe('convert()', () => {
+
+    it('converts', () => {
+        // note I could construct a perfectly isolated Wire object, but who cares about isolation in something this small?
+        const lines = parseFullInput('1U,2R\n0U')[0];
+        const segments = convert(lines);
+        expect(segments.length).toBe(2);
+
+        // segment 1 starts at 0,0 and goes 1U to 0,1
+        const s1 = segments[0];
+        expect(s1.topLeft.x).toBe(0);
+        expect(s1.topLeft.y).toBe(1);
+        expect(s1.bottomRight.x).toBe(0);
+        expect(s1.bottomRight.x).toBe(0);
+    });
+});
 describe('parseLine()', () => {
     it('parses', () => {
         expectLineToBe(parseLine('2U'), 2, 'up');

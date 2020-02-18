@@ -1,3 +1,6 @@
+// https://stackoverflow.com/a/43573897
+import { checkIntersection } from "line-intersect";
+
 function parse(input: string) : Line {
     if (!input) throw "missing input";
     const regex = /\d+/;
@@ -52,9 +55,45 @@ interface Segment {
     bottomRight: Point,
 }
 
-function findWireIntersections(wires: Segment[][]) {
+function findWireIntersections(wires: Segment[][]) : Point[] {
+    if (wires.length !== 2) throw "expected exactly 2 wires";
 
-    throw "hey";
+    const wire1 = wires[0];
+    const wire2 = wires[1];
+    let intersections : Point[] = [];
+
+    for(let s1 of wire1) {
+        for (let s2 of wire2) {
+            check(s1);
+            check(s2);
+            const result = checkIntersection(s1.topLeft.x, s1.topLeft.y, s1.bottomRight.x, s1.bottomRight.y, s2.topLeft.x, s2.topLeft.y, s2.bottomRight.x, s2.bottomRight.y);
+            if (!result || !result.point || result.type === 'none' || result.type === 'parallel')
+                continue;
+            
+            if (!Number.isInteger(result.point.x)) throw `x value ${result.point.x} must be a whole number`;
+            if (!Number.isInteger(result.point.y)) throw `y value ${result.point.y} must be a whole number`;
+
+            // ignore intersections at point 0,0
+            if (result.point.x === 0 && result.point.y === 0)
+                continue;
+
+            intersections.push({ x: result.point.x, y: result.point.y });
+        }
+    }
+
+    if (intersections.length === 0) throw "expected to find at least one intersection";
+
+    return intersections;
+}
+
+function check(s: Segment) {
+    if (!s) throw "segment is falsy";
+    if (!s.topLeft) throw "missing topLeft";
+    if (!Number.isInteger(s.topLeft.x)) throw "missing x value";
+    if (!Number.isInteger(s.topLeft.y)) throw "missing y value";
+    if (!s.bottomRight) throw "missing bottomRight";
+    if (!Number.isInteger(s.bottomRight.x)) throw "missing x value";
+    if (!Number.isInteger(s.bottomRight.y)) throw "missing y value";
 }
 
 function convertLinesToSegments(lines: Line[]) {
@@ -84,7 +123,7 @@ function convertLineToSegment(startingPosition: Point, line: Line) {
 
 function getNewPosition(startingPosition: Point, line: Line) {
     if (line.direction === 'up')
-        return { x: startingPosition.x, y: startingPosition.y + line.distance };
+        return { x: startingPosition.x, y: startingPosition.y - line.distance };
     if (line.direction === 'down')
         return { x: startingPosition.x, y: startingPosition.y + line.distance };
     if (line.direction === 'left')

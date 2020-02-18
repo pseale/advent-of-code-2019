@@ -25,14 +25,15 @@ describe("findIntersections()", () => {
             // ++- <-- we expect the two wires to meet up at 1,-1
             // ++.
             const wires = parseFullInput('1U,2R\n1R,2U');
-            const intersections = findIntersections(wires);
+            const segments = wires.map((x:any) => convert(x));
+            const intersections = findIntersections(segments);
             expect(intersections.length).toBe(1);
 
             const i = intersections[0];
             expect(i.x).toBe(1);
             expect(i.y).toBe(-1);
-        })
-    })
+        });
+    });
 });
 
 function createSegment(topLeftX: number, topLeftY: number, bottomRightX: number, bottomRightY: number) {
@@ -50,7 +51,7 @@ describe('convert()', () => {
         // segment 1 starts at 0,0 and goes 1U to 0,1
         const s1 = segments[0];
         expect(s1.topLeft.x).toBe(0);
-        expect(s1.topLeft.y).toBe(1);
+        expect(s1.topLeft.y).toBe(-1);
         expect(s1.bottomRight.x).toBe(0);
         expect(s1.bottomRight.x).toBe(0);
     });
@@ -80,6 +81,4 @@ function expectLineToBe(l : any, distance: number, direction: 'up'|'down'|'left'
     expect(l).toBeTruthy();
     expect(l.direction).toBe(direction);
     expect(l.distance).toBe(distance);
-
-
 }

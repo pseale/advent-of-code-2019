@@ -1,5 +1,12 @@
-const { parseLine, parseFullInput, findIntersections, convert } = require('./solve.js');
+const { parseLine, parseFullInput, findIntersections, findClosestIntersection, convert } = require('./solve.js');
 
+describe("findClosestIntersection()", () => {
+    it("example 1", () => {
+        const intersections = findFor('R75,D30,R83,U83,L12,D49,R71,U7,L72\nU62,R66,U55,R34,D71,R55,D58,R83');
+        const closest = findClosestIntersection(intersections);
+        expect(closest).toBe(159);
+    });
+});
 describe("findIntersections()", () => {
     describe("when the segments do not intersect", () => {
         it("errors", () => {

@@ -55,6 +55,10 @@ interface Segment {
     bottomRight: Point,
 }
 
+function findClosest(intersections: Point[]) {
+    return -1;
+}
+
 function findWireIntersections(wires: Segment[][]) : Point[] {
     if (wires.length !== 2) throw "expected exactly 2 wires";
 

@@ -24,9 +24,7 @@ describe("findIntersections()", () => {
             // .|.
             // ++- <-- we expect the two wires to meet up at 1,-1
             // ++.
-            const wires = parseFullInput('1U,2R\n1R,2U');
-            const segments = wires.map((x:any) => convert(x));
-            const intersections = findIntersections(segments);
+            const intersections = findFor('U1,R2\nR1,U2');
             expect(intersections.length).toBe(1);
 
             const i = intersections[0];
@@ -36,6 +34,11 @@ describe("findIntersections()", () => {
     });
 });
 
+function findFor(input: string) {
+    const wires = parseFullInput(input);
+    const segments = wires.map((x:any) => convert(x));
+    return findIntersections(segments);
+}
 function createSegment(topLeftX: number, topLeftY: number, bottomRightX: number, bottomRightY: number) {
     return { topLeft: { x: topLeftX, y: topLeftY }, bottomRight: { x: bottomRightX, y: bottomRightY } };
 }
@@ -44,7 +47,7 @@ describe('convert()', () => {
 
     it('converts', () => {
         // note I could construct a perfectly isolated Wire object, but who cares about isolation in something this small?
-        const lines = parseFullInput('1U,2R\n0U')[0];
+        const lines = parseFullInput('U1,R2\nU0')[0];
         const segments = convert(lines);
         expect(segments.length).toBe(2);
 
@@ -58,13 +61,13 @@ describe('convert()', () => {
 });
 describe('parseLine()', () => {
     it('parses', () => {
-        expectLineToBe(parseLine('2U'), 2, 'up');
+        expectLineToBe(parseLine('U2'), 2, 'up');
     })
 });
 
 describe('parseFullInput()', () => {
     it('parses two wires correctly', () => {
-        const wires = parseFullInput('2U,3D\n4L,5R,6U');
+        const wires = parseFullInput('U2,D3\nL4,R5,U6');
         expect(wires.length).toBe(2);
 
         const w1lines = wires[0];

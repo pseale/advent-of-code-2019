@@ -12,7 +12,7 @@ function parse(input: string) : Line {
     if (Number(match[0]) !== Number.parseFloat(match[0])) throw "partial number provided, but we expected a whole number"
     const distance = Number(match[0]);
 
-    const directionCharacter = input[input.length - 1];
+    const directionCharacter = input[0];
     return { direction: getDirection(directionCharacter), distance: distance}; 
 }
 
@@ -138,3 +138,4 @@ exports.parseLine = parse;
 exports.parseFullInput = parseInput;
 exports.findIntersections = findWireIntersections;
 exports.convert = convertLinesToSegments;
+exports.findClosestIntersection = findClosest;

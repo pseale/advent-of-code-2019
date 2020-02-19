@@ -1,5 +1,6 @@
 // https://stackoverflow.com/a/43573897
 import { checkIntersection } from "line-intersect";
+import { sign } from "crypto";
 
 function parse(input: string) : Line {
     if (!input) throw "missing input";
@@ -50,9 +51,15 @@ interface Point {
     y: number
 }
 
+interface Intersection {
+    x: number,
+    y: number,
+    signalDelay: number
+}
+
 interface Segment {
-    topLeft: Point,
-    bottomRight: Point,
+    start: Point,
+    end: Point,
 }
 
 function findClosest(intersections: Point[]) {
@@ -66,25 +73,31 @@ function findWireIntersections(wires: Segment[][]) : Point[] {
 
     const wire1 = wires[0];
     const wire2 = wires[1];
-    let intersections : Point[] = [];
+    let intersections : Intersection[] = [];
 
-    for(let s1 of wire1) {
+    let wire1SignalDelay = 0;
+    for (let s1 of wire1) {
+
+        let wire2SignalDelay = 0;
         for (let s2 of wire2) {
-            check(s1);
-            check(s2);
-            const result = checkIntersection(s1.topLeft.x, s1.topLeft.y, s1.bottomRight.x, s1.bottomRight.y, s2.topLeft.x, s2.topLeft.y, s2.bottomRight.x, s2.bottomRight.y);
-            if (!result || !result.point || result.type === 'none' || result.type === 'parallel')
-                continue;
+            const result = checkIntersection(s1.start.x, s1.start.y, s1.end.x, s1.end.y, s2.start.x, s2.start.y, s2.end.x, s2.end.y);
             
-            if (!Number.isInteger(result.point.x)) throw `x value ${result.point.x} must be a whole number`;
-            if (!Number.isInteger(result.point.y)) throw `y value ${result.point.y} must be a whole number`;
+            if (result.type === 'intersecting') {
+                if (!result.point) throw "this is required by the TypeScript compiler and/or imperfect type definitions in the library I referenced. Anyway, error.";
+                if (!Number.isInteger(result.point.x)) throw `x value ${result.point.x} must be a whole number`;
+                if (!Number.isInteger(result.point.y)) throw `y value ${result.point.y} must be a whole number`;
 
-            // ignore intersections at point 0,0
-            if (result.point.x === 0 && result.point.y === 0)
-                continue;
+                // ignore intersections at point 0,0
+                if (result.point.x !== 0 || result.point.y !== 0) {
+                    const signalDelay = wire1SignalDelay + calculateDistance(result.point, s1.start) + wire2SignalDelay + calculateDistance(result.point, s2.start);
+                    intersections.push({ x: result.point.x, y: result.point.y, signalDelay: signalDelay });
+                }
+            }
 
-            intersections.push({ x: result.point.x, y: result.point.y });
+            wire2SignalDelay += calculateDistance(s2.start, s2.end);
         }
+
+        wire1SignalDelay += calculateDistance(s1.start, s1.end);
     }
 
     if (intersections.length === 0) throw "expected to find at least one intersection";
@@ -92,16 +105,9 @@ function findWireIntersections(wires: Segment[][]) : Point[] {
     return intersections;
 }
 
-function check(s: Segment) {
-    if (!s) throw "segment is falsy";
-    if (!s.topLeft) throw "missing topLeft";
-    if (!Number.isInteger(s.topLeft.x)) throw "missing x value";
-    if (!Number.isInteger(s.topLeft.y)) throw "missing y value";
-    if (!s.bottomRight) throw "missing bottomRight";
-    if (!Number.isInteger(s.bottomRight.x)) throw "missing x value";
-    if (!Number.isInteger(s.bottomRight.y)) throw "missing y value";
+function calculateDistance(a: Point, b: Point) {
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 }
-
 function convertLinesToSegments(lines: Line[]) {
     let nextStartingPosition = { x: 0, y: 0 };
 
@@ -118,13 +124,7 @@ function convertLinesToSegments(lines: Line[]) {
 function convertLineToSegment(startingPosition: Point, line: Line) {
     const newPosition = getNewPosition(startingPosition, line);
 
-    if (line.direction === 'down' || line.direction === 'right') {
-        // we went down or to the right, so the starting position is at the top left
-        return { next: newPosition, segment: { topLeft: startingPosition, bottomRight: newPosition } };
-    } else {
-        // went up or to the left, so the new position is at the top left
-        return { next: newPosition, segment: { topLeft: newPosition, bottomRight: startingPosition } };
-    }
+    return { next: newPosition, segment: { start: startingPosition, end: newPosition } };
 }
 
 function getNewPosition(startingPosition: Point, line: Line) {
@@ -145,3 +145,4 @@ exports.parseFullInput = parseInput;
 exports.findIntersections = findWireIntersections;
 exports.convert = convertLinesToSegments;
 exports.findClosestIntersection = findClosest;
+exports.calculateDistance2 = calculateDistance;

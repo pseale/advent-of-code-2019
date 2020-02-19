@@ -48,6 +48,7 @@ describe("findIntersections()", () => {
             const i = intersections[0];
             expect(i.x).toBe(1);
             expect(i.y).toBe(-1);
+            expect(i.signalDelay).toBe(2);
         });
     });
 });

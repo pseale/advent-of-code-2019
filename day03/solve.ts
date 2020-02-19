@@ -56,7 +56,9 @@ interface Segment {
 }
 
 function findClosest(intersections: Point[]) {
-    return -1;
+    // I wish I had LINQ right now
+    // meanwhile I'm refusing to use lodash, which has many great options to help solve this "find minimum" problem 
+    return Math.min(...(intersections.map(x => Math.abs(x.x) + Math.abs(x.y))));
 }
 
 function findWireIntersections(wires: Segment[][]) : Point[] {

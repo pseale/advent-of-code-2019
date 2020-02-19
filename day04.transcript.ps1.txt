@@ -1,0 +1,241 @@
+**********************
+PowerShell transcript start
+<<<REDACTED>>>
+**********************
+Transcript started, output file is day04.transcript.ps1.txt
+THIS IS THE POWER SHELL>$low = 240920
+THIS IS THE POWER SHELL>$high = 789857
+THIS IS THE POWER SHELL>function has-samedigit($n) { $n.tostring() -match "11|22|33|44|55|66|77|88|99" }
+THIS IS THE POWER SHELL>has-samedigit 123
+False
+THIS IS THE POWER SHELL>has-samedigit 1231
+False
+THIS IS THE POWER SHELL>11
+11
+THIS IS THE POWER SHELL>has-samedigit 12311
+True
+THIS IS THE POWER SHELL>has-samedigit 12322
+True
+THIS IS THE POWER SHELL>function has-samedigit($n) { $n.tostring() -match "11|22|33|44|55|66|77|88|99|00" }
+THIS IS THE POWER SHELL>function always-increasing($n) {
+$digits = $n.tostring().tochararray() | % { [int]$_ }
+$lowestDigit = 0
+foreach ($digit in $digits) {
+if ($digit -lt $lowestDigit) { return $false }
+}
+return $true
+}
+THIS IS THE POWER SHELL>always-increasing 123
+True
+THIS IS THE POWER SHELL>always-increasing 1234
+True
+THIS IS THE POWER SHELL>always-increasing 12344
+True
+THIS IS THE POWER SHELL>always-increasing 12343
+True
+THIS IS THE POWER SHELL>function always-increasing($n) {
+$digits = $n.tostring().tochararray() | % { [int]$_ }
+$lowestDigit = 0
+foreach ($digit in $digits) {
+if ($digit -lt $lowestDigit) { return $false }
+}
+return $true
+}
+THIS IS THE POWER SHELL>function always-increasing($n) {
+$digits = $n.tostring().tochararray() | % { [int]$_ }
+$lowestDigit = 0
+foreach ($digit in $digits) {
+if ($digit -lt $lowestDigit) { return $false } else { $lowestDigit = $digit }
+}
+return $true
+}
+THIS IS THE POWER SHELL>always-increasing 12343
+False
+THIS IS THE POWER SHELL>always-increasing 1234
+True
+THIS IS THE POWER SHELL>always-increasing 12344
+True
+THIS IS THE POWER SHELL>always-increasing 123449
+True
+THIS IS THE POWER SHELL>$low..$high | ? { has-samedigit $_ -and always-increasing $_ }
+240922
+240933
+<<REDACTED BECAUSE IT WAS A VERY LONG LIST OF NUMBERS. IT WAS A MISTAKE, ALL PART OF THE LEARNING JOURNEY>>
+264668
+264669
+264677
+264688
+264699
+264700
+>> TerminatingError(): "The pipeline has been stopped."
+>> TerminatingError(): "The pipeline has been stopped."
+THIS IS THE POWER SHELL>$low..$high | ? { has-samedigit $_ -and always-increasing $_ } | measure-object sum
+PS>TerminatingError(): "The pipeline has been stopped."
+>> TerminatingError(): "The pipeline has been stopped."
+THIS IS THE POWER SHELL>$low..$high | ? { has-samedigit $_ -and always-increasing $_ } | measure-object count
+measure-object : Cannot process argument because the value of argument "Property" is not valid. Change the value of the "Property" argument and run the operation again.
+At line:1 char:66
++ ... { has-samedigit $_ -and always-increasing $_ } | measure-object count
++                                                      ~~~~~~~~~~~~~~~~~~~~
++ CategoryInfo          : InvalidArgument: (:) [Measure-Object], PSArgumentException
++ FullyQualifiedErrorId : GenericMeasurePropertyNotFound,Microsoft.PowerShell.Commands.MeasureObjectCommand
+measure-object : Cannot process argument because the value of argument "Property" is not valid. Change the value of the "Property" argument and run the operation again.
+At line:1 char:66
++ ... { has-samedigit $_ -and always-increasing $_ } | measure-object count
++                                                      ~~~~~~~~~~~~~~~~~~~~
++ CategoryInfo          : InvalidArgument: (:) [Measure-Object], PSArgumentException
++ FullyQualifiedErrorId : GenericMeasurePropertyNotFound,Microsoft.PowerShell.Commands.MeasureObjectCommand
+
+THIS IS THE POWER SHELL>$low..$high | ? { has-samedigit $_ -and always-increasing $_ } | measure-object
+
+Count             : 221583
+Average           :
+Sum               :
+Maximum           :
+Minimum           :
+StandardDeviation :
+Property          :
+
+
+THIS IS THE POWER SHELL>always-increasing 264700
+False
+THIS IS THE POWER SHELL>$low..$high | ? { (has-samedigit $_) -and (always-increasing $_) } | measure-object
+
+Count             : 1154
+Average           :
+Sum               :
+Maximum           :
+Minimum           :
+StandardDeviation :
+Property          :
+
+
+THIS IS THE POWER SHELL>1..2
+1
+2
+THIS IS THE POWER SHELL>write-host -ForegroundColor red "that was part A, SUCCESS"
+that was part A, SUCCESS
+THIS IS THE POWER SHELL>"111122" -match "22"
+True
+THIS IS THE POWER SHELL>"111122" -match "22$"
+True
+THIS IS THE POWER SHELL>"111122" -match "22([^2]|$)"
+True
+THIS IS THE POWER SHELL>"1111223" -match "22([^2]|$)"
+True
+THIS IS THE POWER SHELL>"1111223" -match "(^|[^2])22([^2]|$)"
+True
+THIS IS THE POWER SHELL>"11112223" -match "(^|[^2])22([^2]|$)"
+False
+THIS IS THE POWER SHELL>"1111223" -match "(^|[^2])22([^2]|$)"
+True
+THIS IS THE POWER SHELL>0..9 | % { "`"(^|[^$_])$_$_([^$_]|$)`"" }
+"(^|[^0])00([^0]|$)"
+"(^|[^1])11([^1]|$)"
+"(^|[^2])22([^2]|$)"
+"(^|[^3])33([^3]|$)"
+"(^|[^4])44([^4]|$)"
+"(^|[^5])55([^5]|$)"
+"(^|[^6])66([^6]|$)"
+"(^|[^7])77([^7]|$)"
+"(^|[^8])88([^8]|$)"
+"(^|[^9])99([^9]|$)"
+THIS IS THE POWER SHELL>[string]::Join("|", (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" }))
+(^|[^0])00([^0]|$)|(^|[^1])11([^1]|$)|(^|[^2])22([^2]|$)|(^|[^3])33([^3]|$)|(^|[^4])44([^4]|$)|(^|[^5])55([^5]|$)|(^|[^6])66([^6]|$)|(^|[^7])77([^7]|$)|(^|[^8])88([^8]|$)|(^|[^9])99([^9]|$)
+THIS IS THE POWER SHELL>[string]::Join("|", (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" })) | Set-ClusteredScheduledTask
+PS>TerminatingError(Set-ClusteredScheduledTask): "Parameter set cannot be resolved using the specified named parameters. One or more parameters issued cannot be used together or an insufficient number of parameters were provided."
+Set-ClusteredScheduledTask : Parameter set cannot be resolved using the specified named parameters. One or more parameters issued cannot be used together or an insufficient number of parameters were provided.
+At line:1 char:64
++ ... (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" })) | Set-ClusteredScheduledTask
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~
++ CategoryInfo          : InvalidArgument: (:) [Set-ClusteredScheduledTask], ParameterBindingException
++ FullyQualifiedErrorId : AmbiguousParameterSet,Set-ClusteredScheduledTask
+Set-ClusteredScheduledTask : Parameter set cannot be resolved using the specified named parameters. One or more parameters issued cannot be used together or an insufficient number of parameters were provided.
+At line:1 char:64
++ ... (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" })) | Set-ClusteredScheduledTask
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~
++ CategoryInfo          : InvalidArgument: (:) [Set-ClusteredScheduledTask], ParameterBindingException
++ FullyQualifiedErrorId : AmbiguousParameterSet,Set-ClusteredScheduledTask
+
+THIS IS THE POWER SHELL>[string]::Join("|", (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" })) | Set-Clipboard
+Set-Clipboard : The term 'Set-Clipboard' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:64
++ ... ]::Join("|", (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" })) | Set-Clipboard
++                                                             ~~~~~~~~~~~~~
++ CategoryInfo          : ObjectNotFound: (Set-Clipboard:String) [], CommandNotFoundException
++ FullyQualifiedErrorId : CommandNotFoundException
+Set-Clipboard : The term 'Set-Clipboard' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:64
++ ... ]::Join("|", (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" })) | Set-Clipboard
++                                                             ~~~~~~~~~~~~~
++ CategoryInfo          : ObjectNotFound: (Set-Clipboard:String) [], CommandNotFoundException
++ FullyQualifiedErrorId : CommandNotFoundException
+
+THIS IS THE POWER SHELL>write-host WHAT WHERE IS MY CLIPBOARD
+WHAT WHERE IS MY CLIPBOARD
+THIS IS THE POWER SHELL>[string]::Join("|", (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" })) | out-Clipboard
+out-Clipboard : The term 'out-Clipboard' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:64
++ ... ]::Join("|", (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" })) | out-Clipboard
++                                                             ~~~~~~~~~~~~~
++ CategoryInfo          : ObjectNotFound: (out-Clipboard:String) [], CommandNotFoundException
++ FullyQualifiedErrorId : CommandNotFoundException
+out-Clipboard : The term 'out-Clipboard' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:64
++ ... ]::Join("|", (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" })) | out-Clipboard
++                                                             ~~~~~~~~~~~~~
++ CategoryInfo          : ObjectNotFound: (out-Clipboard:String) [], CommandNotFoundException
++ FullyQualifiedErrorId : CommandNotFoundException
+
+THIS IS THE POWER SHELL>help clip
+THIS IS THE POWER SHELL>cls
+THIS IS THE POWER SHELL>[string]::Join("|", (0..9 | % { "(^|[^$_])$_$_([^$_]|$)" }))
+(^|[^0])00([^0]|$)|(^|[^1])11([^1]|$)|(^|[^2])22([^2]|$)|(^|[^3])33([^3]|$)|(^|[^4])44([^4]|$)|(^|[^5])55([^5]|$)|(^|[^6])66([^6]|$)|(^|[^7])77([^7]|$)|(^|[^8])88([^8]|$)|(^|[^9])99([^9]|$)
+C:\a\advent-of-code-2019
+ [
+master
+ ≡
+ +1
+ ~0
+ -0
+ !
+]
+>
+THIS IS THE POWER SHELL>function has-exactlytwodigits($n) {
+$n.tostring() -match '(^|[^0])00([^0]|$)|(^|[^1])11([^1]|$)|(^|[^2])22([^2]|$)|(^|[^3])33([^3]|$)|(^|[^4])44([^4]|$)|(^|[^5])55([^5]|$)|(^|[^6])66([^6]|$)|(^|[^7])77([^7]|$)|(^|[^8])88([^8]|$)|(^|[^9])99([^9]|$)'
+}
+THIS IS THE POWER SHELL>has-exactlytwodigits 111122
+True
+THIS IS THE POWER SHELL>has-exactlytwodigits 1111222
+False
+THIS IS THE POWER SHELL>has-exactlytwodigits 1111223
+True
+THIS IS THE POWER SHELL>has-exactlytwodigits 1111
+False
+THIS IS THE POWER SHELL>has-exactlytwodigits 111
+False
+THIS IS THE POWER SHELL>has-exactlytwodigits 11
+True
+THIS IS THE POWER SHELL>has-exactlytwodigits 1
+False
+THIS IS THE POWER SHELL>$low..$high | ? { (has-exactlytwodigits $_) -and (always-increasing $_) } | measure-object
+
+Count             : 750
+Average           :
+Sum               :
+Maximum           :
+Minimum           :
+StandardDeviation :
+Property          :
+
+
+THIS IS THE POWER SHELL>write-host -ForegroundColor RED "WHAT MADNESS HATH MAN (i.e. me) WROUGHT?!?!?!???! WHAT REGEX HAVE I LOOSED UPON THIS EARTH?"
+WHAT MADNESS HATH MAN (i.e. me) WROUGHT?!?!?!???! WHAT REGEX HAVE I LOOSED UPON THIS EARTH?
+THIS IS THE POWER SHELL>Stop-Transcript
+**********************
+PowerShell transcript end
+**********************
